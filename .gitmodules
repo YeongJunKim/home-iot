@@ -1,0 +1,3 @@
+[submodule "pywit"]
+	path = pywit
+	url = https://github.com/wit-ai/pywit
