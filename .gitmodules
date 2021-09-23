@@ -1,3 +1,6 @@
 [submodule "pywit"]
 	path = pywit
 	url = https://github.com/wit-ai/pywit
+[submodule "snowboy"]
+	path = snowboy
+	url = https://github.com/Kitt-AI/snowboy
