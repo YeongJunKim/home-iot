@@ -21,9 +21,11 @@
 #include <WiFiNINA.h> // NANO 33 IoT에서 Wi-Fi 기능을 사용하기 위한 라이브러리 입니다.
 #include <PubSubClient.h>
 
+#define CURRENT 20
+
 const char* ssid = "colson_KT_GIGA_2.4G";
 const char* password = "701985ss**";
-const char* mqtt_server = "172.30.1.41";
+const char* mqtt_server = "172.30.1.22";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -122,8 +124,32 @@ void loop()
     int value = analogRead(A0);
     int value2 = analogRead(A2);
 
+    float volt20A = value * (3.3 / 1024);
+    float current20A = abs(volt20A - 2.32) * (CURRENT / 2);
+    float watt20A = volt20A * current20A;
+
+
+    float volt5A = value2 * (3.3 / 1024);
+    float current5A = abs(volt5A - 2.32) * (5 / 2);
+    float watt5A = volt5A * current5A;
+    
+    Serial.print("value (MAX 20A): "); Serial.print(value); Serial.print(", ");
+    Serial.print("volt: "); Serial.print(volt20A);
+    Serial.print("watt: "); Serial.println(watt20A);
+    Serial.print("value (MAX 5A): ");Serial.print(value2); Serial.print(", ");
+    Serial.print("volt5A: "); Serial.print(volt5A);
+    Serial.print("watt5A: "); Serial.println(watt5A);
+
     int state = digitalRead(2);
 
+    client.publish("stat/outlet-2/volts", String("220").c_str());
+    client.publish("stat/outlet-2/amperes", String(current20A).c_str());
+    client.publish("stat/outlet-2/watts", String(watt20A).c_str());
+
+    client.publish("stat/outlet-3/volts", String("220").c_str());
+    client.publish("stat/outlet-3/amperes", String(current5A).c_str());
+    client.publish("stat/outlet-3/watts", String(watt5A).c_str());
+    
     if (state != 0)
       client.publish("stat/outlet-1/power", "0");
     else

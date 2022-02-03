@@ -24,7 +24,7 @@
 
 const char* ssid = "colson_KT_GIGA_2.4G";
 const char* password = "701985ss**";
-const char* mqtt_server = "172.30.1.41";
+const char* mqtt_server = "172.30.1.22";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
